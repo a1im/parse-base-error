@@ -6,9 +6,14 @@ import { isDef } from './utils/predicate/isDef';
 export const parseBaseError = (e: unknown, title?: string, data?: unknown): ParsedBaseError => {
     const strTitle = title ? `[${title}]` : '';
     const errorData: unknown[] = [];
-    const isParsedError = e instanceof ParsedBaseError;
+    const isParsedError = (
+        has('plainMessage', e)
+        && has('data', e)
+        && has('title', e)
+        && has('hideLog', e)
+    );
 
-    if (isParsedError) {
+    if (isParsedError && Array.isArray(e.data)) {
         errorData.push(...e.data);
     } else if (has('data', e) && isDef(e.data)) {
         errorData.push(e.data);
@@ -20,14 +25,14 @@ export const parseBaseError = (e: unknown, title?: string, data?: unknown): Pars
 
     if (isParsedError) {
         return new ParsedBaseError(
-            e.plainMessage,
+            String(e.plainMessage),
             {
                 title: updateErrorTitles([
-                    e.title,
+                    String(e.title),
                     strTitle,
                 ]),
                 data: errorData,
-                hideLog: e.hideLog,
+                hideLog: Boolean(e.hideLog),
             },
         );
     }

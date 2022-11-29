@@ -9,6 +9,8 @@ export class ParsedBaseError extends Error {
 
     hideLog: boolean;
 
+    log;
+
     constructor(message: string, {
         title,
         data,
@@ -23,16 +25,16 @@ export class ParsedBaseError extends Error {
         this.title = title ?? '';
         this.data = data ?? [];
         this.hideLog = Boolean(hideLog);
-    }
 
-    log() {
-        if (this.hideLog) {
+        this.log = () => {
+            if (this.hideLog) {
+                return this;
+            }
+            const logData = this.data.length ? JSON.stringify(this.data) : '';
+
+            console.error(this.message, logData);
+
             return this;
-        }
-        const logData = this.data.length ? JSON.stringify(this.data) : '';
-
-        console.error(this.message, logData);
-
-        return this;
+        };
     }
 }
