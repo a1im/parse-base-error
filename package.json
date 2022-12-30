@@ -1,6 +1,6 @@
 {
   "name": "parse-base-error",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Parse base error",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
